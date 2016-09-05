@@ -41,8 +41,9 @@ window.HIncludeElement = (function() {
   var outstanding = 0;
 
   function showContent(element, req){
-    var fragment = element.getAttribute('fragment') || 'body';
+    var fragment = element.getAttribute('fragment');
     if (req.status === 200 || req.status === 304) {
+
       var container = element.createContainer.call(element, req);
 
       checkRecursion(element);
@@ -149,14 +150,14 @@ window.HIncludeElement = (function() {
   var proto = Object.create(HTMLElement.prototype);
 
   proto.createContainer = function(req){
-    var container = document.implementation.createHTMLDocument(' ').documentElement;
+    var container = document.createElement('div');
     container.innerHTML = req.responseText;
 
     return container;
   };
 
   proto.extractFragment = function(container, fragment, req) {
-    var node = container.querySelector(fragment);
+    var node = fragment ? container.querySelector(fragment) : container;
 
     if (!node) {
       throw new Error("Did not find fragment in response");
