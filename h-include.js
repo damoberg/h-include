@@ -163,6 +163,12 @@ window.HIncludeElement = (function() {
       throw new Error("Did not find fragment in response");
     }
 
+    while (node = container.firstChild) {
+      if (node.nodeType === 3 && !/^\s*$/.test(node.nodeValue)) break;
+      if (node.nodeType === 1 && !/^(LINK|META|SCRIPT|STYLE|TITLE)$/.test(node.tagName)) break;
+      container.removeChild(node);
+    }
+
     return node;
   };
 
